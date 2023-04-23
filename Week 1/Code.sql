@@ -181,9 +181,73 @@ SELECT
 	*,
 	IIF(UserName = 'johlen', 'YES', 'NO') AS 'goy'
 FROM
-	users
+	users;
 
 
 
 
-SELECT 'E' + FORMAT(Episode, '00') FROM GameOfThrones
+SELECT 'E' + FORMAT(Episode, '00') FROM GameOfThrones;
+
+
+
+
+SELECT COUNT(*) FROM Elements;
+MIN()
+MAX()
+AVG()
+.. etc.
+
+SELECT string_agg(Symbol, ', ') FROM Elements; -- outputs: H, He, Li, etc..
+
+
+
+
+-- Group by
+-- Group all common values in the Periods column and return a count.
+-- If we dont use COUNT(), than it'll simply just return all the unique values
+SELECT
+	COUNT(Period)
+FROM
+	Elements
+GROUP BY
+    Period;
+
+-- The only columns you can access while grouping, are the ones that are referenced (e.g grouped)
+-- In order to access none grouped columns, you'd need to use aggregation.
+SELECT
+	Period,
+    string_agg(Symbol, ', ')
+FROM
+	Elements
+GROUP BY
+    Period;
+
+
+SELECT
+	Period,
+    string_agg(Symbol, ', ')
+FROM
+	Elements
+GROUP BY
+    Period
+HAVING
+	COUNT(Period) >= 18;
+
+
+SELECT
+	Period,
+    string_agg(Symbol, ', ')
+FROM
+	Elements
+WHERE
+    Boilingpoint < 1000
+GROUP BY
+    Period
+HAVING
+	COUNT(Period) >= 18;
+
+
+
+-- Variables
+DECLARE @Name AS NVARCHAR(MAX) = 'Test';
+SELECT @Name;

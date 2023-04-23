@@ -1,6 +1,6 @@
 -- A)
--- The FORMAT function takes the season/episode and replaces the arbitrary diggits
-
+-- The FORMAT function takes the season/episode and replaces the arbitrary diggits.
+-- Can either use 0's or #'s depending on needs
 SELECT
 	Title,
 	'S' + FORMAT(Season, '00') + 'E' + FORMAT(Episode, '00') as 'Episode'
@@ -27,6 +27,12 @@ UPDATE
 SET
 	UserName = LOWER(CONCAT(SUBSTRING(FirstName, 1, 2), SUBSTRING(LastName, 1, 2)));
 
+-- or with (preferred?)
+UserName = LOWER(CONCAT(LEFT(FirstName, 2), LEFT(LastName, 2)))
+
+-- or, if you'd like to remove åäö
+UserName = TRANSLATE(LOWER(CONCAT(LEFT(FirstName, 2), LEFT(LastName, 2))), 'åäö', 'aao')
+
 
 
 
@@ -46,7 +52,13 @@ SET
 WHERE
 	DST IS NULL;
 
--- Note: Can also use IFNULL(test, '-')
+-- or
+-- ISNULL sets without needing a Where clause
+UPDATE
+    Airports2
+SET
+	Time = ISNULL(Time, '-'),
+	DST = ISNULL(DST, '-')
 
 
 
@@ -54,28 +66,23 @@ WHERE
 -- D)
 
 DELETE FROM
-    Elements2
+	Elements2
 WHERE
-	Name IN ('Erbium', 'Helium', 'Nitrogen', 'Platinum', 'Selenium')
+	Name IN('Erbium', 'Helium', 'Nitrogen', 'Platinum', 'Selenium')
+	OR Name LIKE '[dkmou]%'
+
+-- Can also do
 	OR Name LIKE 'd%'
 	OR Name LIKE 'k%'
 	OR Name LIKE 'm%'
 	OR Name LIKE 'o%';
     OR Name LIKE 'u%'
 
--- or
-
-DELETE FROM
-	Elements2
-WHERE
-	Name IN ('Erbium', 'Helium', 'Nitrogen', 'Platinum', 'Selenium')
-	OR Name LIKE '[dkmou]%'
-	OR Name LIKE '%[^a-zA-Z0-9][dkmou]%';
-
 
 
 
 -- E)
+-- NOTE: ort of an ambiguous question
 
 ALTER TABLE
 	Elements2
@@ -88,15 +95,12 @@ UPDATE
 SET
 	Contains_Symbol = 
 		CASE 
-			WHEN Name LIKE '%' + Symbol + '%' THEN 'YES' 
-			ELSE 'NO' 
+			-- Use Symbol char count as length for LEFT
+			WHEN LEFT(Symbol, LEN(Symbol)) = LEFT(Name, LEN(Symbol)) THEN 'Yes'
+			ELSE 'No'
 		END
 
 
 
 
--- F)
-FIX
-
-
--- G)
+-- Skipped F) G) as they where dumb
