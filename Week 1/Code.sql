@@ -251,3 +251,32 @@ HAVING
 -- Variables
 DECLARE @Name AS NVARCHAR(MAX) = 'Test';
 SELECT @Name;
+
+SET @Name = 'New val';
+
+
+
+-- Groupings
+SELECT 
+	period, 
+	count(period) AS 'Number of elements',
+	string_agg(Symbol, ', ') AS 'Symbols'
+FROM 
+	Elements
+WHERE
+	Boilingpoint < 1000
+GROUP by 
+	period
+having
+	count(period) <= 3
+
+
+select 
+	id,
+	ShipRegion,
+	ShipCountry,
+	ShipCity
+from 
+	company.orders 
+order by
+	ShipRegion, ShipCountry, ShipCity
