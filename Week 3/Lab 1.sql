@@ -141,3 +141,42 @@ siffra i personnumret är jämn, och värdet ’Male’ för de användare där 
 udda. Sätt in resultatet i en ny tabell ”NewUsers”.
 */
 
+-- REMOVE
+IF OBJECT_ID(N'dbo.NewUsers', N'U') IS NOT NULL
+   DROP TABLE [dbo].NewUsers;
+
+
+SELECT
+	*,
+	CONCAT(FirstName, ' ', LastName) AS 'Name',
+	
+	CASE
+		WHEN
+            /*
+            Get the second to last number in the persons ID by taking a substring of the
+            total ID length minus 1, than check if said number is even by taking the modulo.
+            Female if even, male if not.
+            */
+			SUBSTRING(ID, LEN(ID) - 1, 1) % 2 = 0 THEN 'Female'
+		ELSE
+			'Male'
+	END
+		AS 'Gender'
+INTO
+	NewUsers
+FROM
+	Users;
+
+
+
+
+GO
+
+
+
+
+/*
+Skriv en query som returnerar en tabell med alla användarnamn i ”NewUsers” 
+som inte är unika i den första kolumnen, och antalet gånger de är duplicerade i 
+den andra kolumnen.
+*/
