@@ -1,3 +1,4 @@
+-- PART 1
 -- A)
 -- wtf is going on?
 
@@ -77,3 +78,56 @@ FROM
 GROUP BY
 	CategoryName
 ORDER BY CategoryName DESC;
+
+
+
+
+-- E)
+SELECT TOP (1)
+	company.suppliers.CompanyName as 'Supplier',
+	SUM(company.order_details.Quantity) as 'Products sold'
+FROM
+	company.suppliers
+	INNER JOIN company.products ON company.suppliers.id = company.products.SupplierId
+	INNER JOIN company.order_details ON company.products.Id = company.order_details.ProductId
+	INNER JOIN company.orders ON company.order_details.OrderId = company.orders.Id
+WHERE
+	-- Using datetime, just incase
+	CAST(company.orders.OrderDate AS DATETIME) >= '2013-01-01'
+	AND
+	CAST(company.orders.OrderDate AS DATETIME) < '2014-01-01'
+GROUP BY
+	company.suppliers.CompanyName,
+	company.suppliers.ID -- include ID to deal with companies potentially having the same name
+ORDER BY
+	[Products sold] DESC
+
+
+
+
+-- PART 2
+FIX
+
+
+
+
+-- PART 3
+-- A) & B)
+
+SELECT
+	ar.Name as 'Artist',
+	-- summing seconds and not hours in order to preserve precision.
+	-- Converting to float in order than round using two decimals
+	ROUND(CAST(SUM(tr.Milliseconds / 1000)/3600.0 AS FLOAT), 2) AS hours
+
+FROM
+	music.tracks tr
+	INNER JOIN music.albums al ON tr.AlbumId = al.AlbumId
+	INNER JOIN music.artists ar ON al.ArtistId = ar.ArtistId
+GROUP BY
+	ar.Name
+ORDER BY hours DESC
+
+
+-- C)
+
