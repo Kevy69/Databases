@@ -138,7 +138,7 @@ Ta ut samtliga rader och kolumner från tabellen ”Users”, men slå ihop
 ’Firstname’ och ’Lastname’ till en ny kolumn ’Name’, samt lägg till en extra 
 kolumn ’Gender’ som du ger värdet ’Female’ för alla användare vars näst sista 
 siffra i personnumret är jämn, och värdet ’Male’ för de användare där siffran är 
-udda. Sätt in resultatet i en ny tabell ”NewUsers”.
+udda. Sätt in resultatet i en ny tabell ”NewUsers”. REMOVE
 */
 
 -- REMOVE
@@ -178,5 +178,78 @@ GO
 /*
 Skriv en query som returnerar en tabell med alla användarnamn i ”NewUsers” 
 som inte är unika i den första kolumnen, och antalet gånger de är duplicerade i 
-den andra kolumnen.
+den andra kolumnen. REMOVE
 */
+
+SELECT
+	UserName,
+	COUNT(*) as 'Duplicate count'
+FROM
+	NewUsers
+GROUP BY
+    -- Groupby UserName in order allow for indirectly filtering 
+	UserName
+HAVING
+    -- filter for groups with at least two of the same UserName
+	COUNT(*) > 1;
+
+
+
+
+GO
+
+
+
+
+/*
+Skriv en följd av queries som uppdaterar de användare med dubblerade 
+användarnamn som du fann ovan, så att alla användare får ett unikt 
+användarnamn. D.v.s du kan hitta på nya användarnamn för de användarna, så 
+länge du ser till att alla i ”NewUsers” har unika värden på ’Username’. REMOVE
+*/
+
+-- följd means multiple queries? or should all be unified?
+
+UPDATE
+	NewUsers
+SET
+	UserName = 'jalmar'
+WHERE
+	ID = '880706-3713';
+
+
+UPDATE
+	NewUsers
+SET
+	UserName = 'jane'
+WHERE
+	ID = '811008-5301';
+
+
+UPDATE
+	NewUsers
+SET
+	UserName = 'daniel'
+WHERE
+	ID = '580802-4175';
+
+
+
+
+GO
+
+
+
+
+/*
+Skapa en query som tar bort alla kvinnor födda före 1970 från ”NewUsers”.
+*/
+
+SELECT
+	*
+FROM
+	NewUsers
+WHERE
+	Gender = 'Female'
+	AND
+	LEFT(ID, 2) <= 70
