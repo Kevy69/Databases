@@ -245,11 +245,103 @@ GO
 Skapa en query som tar bort alla kvinnor födda före 1970 från ”NewUsers”.
 */
 
-SELECT
-	*
-FROM
+DELETE FROM
 	NewUsers
 WHERE
 	Gender = 'Female'
 	AND
-	LEFT(ID, 2) <= 70
+    -- Check if the first two diggits of the SSN (which denote the date of birth)
+    -- is less than or equal to 70
+	LEFT(ID, 2) <= 70;
+
+
+
+
+GO
+
+
+
+
+/*
+Lägg till en ny användare i tabellen ”NewUsers”. 
+*/
+
+INSERT INTO
+	-- Specifying columns for added clarity
+	NewUsers(
+		ID,
+		UserName,
+		Password,
+		FirstName,
+		LastName,
+		Email,
+		Phone,
+		Name,
+		Gender
+	)
+VALUES
+	(
+		780420-6996,
+		'snoopy',
+		'42069',
+		'snoop',
+		'dogg',
+		'420.blazeit@gmail.com',
+		'0707696969',
+		'snoop dogg',
+		'Male'
+	);
+
+
+
+
+GO
+
+
+
+
+/*
+Skriv en query som returnerar två kolumner ’gender’ och ’avarage age’, och två 
+rader där ena raden visar medelåldern för män, och andra raden visar 
+medelåldern på kvinnor för alla användare i tabellen ”NewUsers”
+*/
+
+SELECT
+	Gender AS 'Gender',
+
+    -- Subtract the current year from the 20'th century representation of the birth dates.
+    -- Add 1900 to the first two diggits of the ID
+	AVG(YEAR(GETDATE()) - (1900 + LEFT(ID, 2))) AS 'Average age'
+FROM
+	NewUsers
+-- Group by gender in order to run the code both males & females
+GROUP BY Gender;
+
+
+
+
+GO
+
+
+
+
+/*
+Skriv en query som selectar ut alla (77) produkter i company.products 
+Dessa ska visas i 4 kolumner: 
+Id – produktens id 
+Product – produktens namn 
+Supplier – namnet på företaget som leverar produkten 
+Category – namnet på kategorin som produkten tillhör
+*/
+
+SELECT
+	prod.Id,
+	ProductName,
+	CompanyName,
+	CategoryName
+FROM
+    -- join the products, suppliers and categories tables using the
+    -- SupplierId and CategoryId to the respective table id's in order to obtain the data needed
+	company.products prod
+	INNER JOIN company.suppliers sup ON prod.SupplierId = sup.Id
+	INNER JOIN company.categories cat ON cat.Id = prod.CategoryId
