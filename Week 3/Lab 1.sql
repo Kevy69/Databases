@@ -20,7 +20,7 @@ Alright, lets begin!
 /*
 Använd ”select into” för att ta ut kolumnerna ’Spacecraft’, ’Launch date’, 
 ’Carrier rocket’, ’Operator’, samt ’Mission type’ för alla lyckade uppdrag 
-(Successful outcome) och sätt in i en ny tabell med namn ”SuccessfulMissions”. REMOVE
+(Successful outcome) och sätt in i en ny tabell med namn ”SuccessfulMissions”.
 */
 
 -- REMOVE
@@ -52,7 +52,7 @@ GO
 /*
 I kolumnen ’Operator’ har det smugit sig in ett eller flera mellanslag före 
 operatörens namn skriv en query som uppdaterar ”SuccessfulMissions” och tar 
-bort mellanslagen kring operatör. REMOVE
+bort mellanslagen kring operatör.
 */
 
 UPDATE
@@ -74,7 +74,7 @@ I ett flertal fall har värden i kolumnen ’Spacecraft’ ett alternativt namn 
 inom parantes, t.ex: ”Pioneer 0 (Able I)”. Skriv en query som uppdaterar 
 ”SuccessfulMissions” på ett sådant sätt att alla värden i kolumnen ’Spacecraft’ 
 endast innehåller originalnamnet, dvs ta bort alla paranteser och deras 
-innehåll. Ex: ”Pioneer 0 (Able I)” => ”Pioneer 0”. REMOVE
+innehåll. Ex: ”Pioneer 0 (Able I)” => ”Pioneer 0”.
 */
 
 UPDATE SuccessfulMissions
@@ -106,7 +106,7 @@ Skriv en select query som tar ut, grupperar, samt sorterar på kolumnerna
 ’Operator’ och ’Mission type’ från ”SuccessfulMissions”. Som en tredje kolumn 
 ’Mission count’ i resultatet vill vi ha antal uppdrag av varje operatör och typ. Ta 
 bara med de grupper som har fler än ett (>1) uppdrag av samma typ och 
-operatör. REMOVE
+operatör.
 */
 
 SELECT
@@ -138,7 +138,7 @@ Ta ut samtliga rader och kolumner från tabellen ”Users”, men slå ihop
 ’Firstname’ och ’Lastname’ till en ny kolumn ’Name’, samt lägg till en extra 
 kolumn ’Gender’ som du ger värdet ’Female’ för alla användare vars näst sista 
 siffra i personnumret är jämn, och värdet ’Male’ för de användare där siffran är 
-udda. Sätt in resultatet i en ny tabell ”NewUsers”. REMOVE
+udda. Sätt in resultatet i en ny tabell ”NewUsers”.
 */
 
 -- REMOVE
@@ -178,7 +178,7 @@ GO
 /*
 Skriv en query som returnerar en tabell med alla användarnamn i ”NewUsers” 
 som inte är unika i den första kolumnen, och antalet gånger de är duplicerade i 
-den andra kolumnen. REMOVE
+den andra kolumnen.
 */
 
 SELECT
@@ -205,7 +205,7 @@ GO
 Skriv en följd av queries som uppdaterar de användare med dubblerade 
 användarnamn som du fann ovan, så att alla användare får ett unikt 
 användarnamn. D.v.s du kan hitta på nya användarnamn för de användarna, så 
-länge du ser till att alla i ”NewUsers” har unika värden på ’Username’. REMOVE
+länge du ser till att alla i ”NewUsers” har unika värden på ’Username’.
 */
 
 -- följd means multiple queries? or should all be unified?
@@ -345,3 +345,31 @@ FROM
 	company.products prod
 	INNER JOIN company.suppliers sup ON prod.SupplierId = sup.Id
 	INNER JOIN company.categories cat ON cat.Id = prod.CategoryId
+    
+
+
+
+GO
+
+
+
+
+/*
+Skriv en query som listar antal anställda i var och en av de fyra regionerna i 
+tabellen company.regions
+*/
+
+SELECT
+	RegionDescription AS 'Region',
+	COUNT(*) AS 'Number of Employees'
+FROM
+    -- Join the employees, employee_territory, territories and regions tables in order to obtain
+    -- the needed relational data
+	company.employees emp
+	INNER JOIN company.employee_territory emp_terr ON emp.Id = emp_terr.EmployeeId
+	INNER JOIN company.territories terr ON emp_terr.TerritoryId = terr.Id
+	INNER JOIN company.regions reg ON terr.RegionId = reg.Id
+GROUP BY
+    -- Group by in order to get the number of employees per region in each group
+	RegionId,
+	RegionDescription
