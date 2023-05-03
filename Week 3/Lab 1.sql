@@ -1,16 +1,18 @@
 /*
+PREFACE
+
+1. Using excessive spacing between "GO"'s due to my dyslexia.
+2. Self explanatory code won't have any comments. The best part is no part!
+
+Alright, lets begin!
+may the lord have mercy on my soul.
+
+
 TODO:
-1. REMOVE QUESTION COMMENTS BEFORE HANDING IN
 2. Question 4 is kinda sus. tf does he mean?
 3. add more comments to code?
 
 
-PREFACE
-
-1. Using excessive spacing between "GO"'s due to my dyslexia.
-2. Self explanatory code won't have any comments. The best part is no part.
-
-Alright, lets begin!
 */
 
 
@@ -23,7 +25,7 @@ Använd ”select into” för att ta ut kolumnerna ’Spacecraft’, ’Launch 
 (Successful outcome) och sätt in i en ny tabell med namn ”SuccessfulMissions”.
 */
 
--- REMOVE
+-- for re-runnability (is that a word?)
 IF OBJECT_ID(N'dbo.SuccessfulMissions', N'U') IS NOT NULL
    DROP TABLE [dbo].SuccessfulMissions;
 
@@ -372,4 +374,42 @@ FROM
 GROUP BY
     -- Group by in order to get the number of employees per region in each group
 	RegionId,
-	RegionDescription
+	RegionDescription;
+
+    
+
+
+GO
+
+
+
+
+/*
+Vi har tidigare kollat på one-to-many och many-to-many joins. Det finns även 
+det som brukar kallas för self-join, när en tabell joinar mot sig själv. 
+Använd en self-join för att lista alla (9) anställda och deras närmsta chef. 
+ 
+De anställda ska visas i tre kolumner: 
+Id – Den anställdes id. 
+Name – Den anställdes titel och fullständiga namn (ex: Dr. Andrew Fuller) 
+Reports to – Närmsta chefens titel och fullständiga namn. 
+ 
+I de fall ReportsTo-kolumnen i company.employer är NULL, visa ’Nobody!’
+*/
+
+SELECT
+	emp.Id,
+	CONCAT(emp.TitleOfCourtesy, ' ', emp.FirstName, ' ', emp.LastName) AS 'Name',
+
+	CASE 
+		WHEN emp.ReportsTo IS NULL THEN
+			'Nobody!'
+		ELSE
+            -- Use 'sup.' to get the correct titles from the join
+			CONCAT(Sup.TitleOfCourtesy, ' ', Sup.FirstName, ' ', Sup.LastName)
+	END AS
+		'Reports to'
+FROM
+    -- Do a right self join in order to match the "Id" & 'ReportsTo' columns
+	company.employees sup
+	RIGHT OUTER JOIN company.employees emp ON sup.Id = emp.ReportsTo;
