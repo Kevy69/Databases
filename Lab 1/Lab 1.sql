@@ -5,14 +5,7 @@ PREFACE
 2. Self explanatory code won't have any comments. The best part is no part!
 
 Alright, lets begin!
-may the lord have mercy on my soul.
-
-
-TODO:
-2. Question 4 is kinda sus. tf does he mean?
-3. add more comments to code?
-
-
+May the lord have mercy on my soul.
 */
 
 
@@ -26,8 +19,8 @@ Använd ”select into” för att ta ut kolumnerna ’Spacecraft’, ’Launch 
 */
 
 -- for re-runnability (is that a word?)
-IF OBJECT_ID(N'dbo.SuccessfulMissions', N'U') IS NOT NULL
-   DROP TABLE [dbo].SuccessfulMissions;
+IF OBJECT_ID(N'SuccessfulMissions', N'U') IS NOT NULL
+   DROP TABLE SuccessfulMissions;
 
 
 SELECT
@@ -41,6 +34,7 @@ INTO
 FROM
 	MoonMissions
 WHERE
+	-- Check if mission was a success
 	Outcome = 'Successful';
 
 
@@ -60,8 +54,8 @@ bort mellanslagen kring operatör.
 UPDATE
 	SuccessfulMissions
 SET
-    -- Use the trim function, which removes leading/trailing spaces
-	Operator = TRIM(Operator)
+    -- trim function, removes leading/trailing spaces
+	Operator = TRIM(Operator);
 
 
 
@@ -83,11 +77,11 @@ UPDATE SuccessfulMissions
 	SET Spacecraft =
 		CASE
 			WHEN
-                -- Check if row value has paranthesis
+                -- Check if row value has parentheses
 				CHARINDEX('(', Spacecraft) > 0
 			THEN
-                -- Extract substring before the paranthesis by using LEFT and getting the char index.
-                -- The '- 1' is to remove the beginning paranthesis as well.
+                -- Extract substring before the parentheses with LEFT, using the char index.
+                -- The '- 1' is to remove the beginning parentheses as well.
 				LEFT(Spacecraft, CHARINDEX('(', Spacecraft) - 1)
 			ELSE
 				Spacecraft
@@ -122,6 +116,7 @@ GROUP BY
 	[Mission type]
 -- Using having instead of WHERE in order to filter based on aggregate
 HAVING
+	-- Only return groups with at least one mission
     COUNT(*) > 1
 ORDER BY
 	Operator,
@@ -143,9 +138,9 @@ siffra i personnumret är jämn, och värdet ’Male’ för de användare där 
 udda. Sätt in resultatet i en ny tabell ”NewUsers”.
 */
 
--- REMOVE
-IF OBJECT_ID(N'dbo.NewUsers', N'U') IS NOT NULL
-   DROP TABLE [dbo].NewUsers;
+-- for re-runnability (is that a word?)
+IF OBJECT_ID(N'NewUsers', N'U') IS NOT NULL
+   DROP TABLE NewUsers;
 
 
 SELECT
@@ -157,7 +152,7 @@ SELECT
             /*
             Get the second to last number in the persons ID by taking a substring of the
             total ID length minus 1, than check if said number is even by taking the modulo.
-            Female if even, male if not.
+            Female = even.
             */
 			SUBSTRING(ID, LEN(ID) - 1, 1) % 2 = 0 THEN 'Female'
 		ELSE
@@ -189,10 +184,10 @@ SELECT
 FROM
 	NewUsers
 GROUP BY
-    -- Groupby UserName in order allow for indirectly filtering 
+    -- Group by 'UserName' in order allow for indirect filtering
 	UserName
 HAVING
-    -- filter for groups with at least two of the same UserName
+    -- Filter for groups with at least two of the same name
 	COUNT(*) > 1;
 
 
@@ -210,7 +205,6 @@ användarnamn. D.v.s du kan hitta på nya användarnamn för de användarna, så
 länge du ser till att alla i ”NewUsers” har unika värden på ’Username’.
 */
 
--- följd means multiple queries? or should all be unified?
 
 UPDATE
 	NewUsers
@@ -265,7 +259,7 @@ GO
 
 
 /*
-Lägg till en ny användare i tabellen ”NewUsers”. 
+Lägg till en ny användare i tabellen ”NewUsers”.
 */
 
 INSERT INTO
@@ -283,14 +277,14 @@ INSERT INTO
 	)
 VALUES
 	(
-		780420-6996,
-		'snoopy',
-		'42069',
-		'snoop',
-		'dogg',
-		'420.blazeit@gmail.com',
-		'0707696969',
-		'snoop dogg',
+		'531109-4270',
+		'cosmos',
+		'42',
+		'carl',
+		'sagan',
+		'cosmos42@gmail.com',
+		'0707424242',
+		'carl sagan',
 		'Male'
 	);
 
@@ -311,13 +305,16 @@ medelåldern på kvinnor för alla användare i tabellen ”NewUsers”
 SELECT
 	Gender AS 'Gender',
 
-    -- Subtract the current year from the 20'th century representation of the birth dates.
-    -- Add 1900 to the first two diggits of the ID
-	AVG(YEAR(GETDATE()) - (1900 + LEFT(ID, 2))) AS 'Average age'
+	AVG(
+		-- Subtract the current date from the birth date obtained from the persons 'ID'.
+		-- Add 1900 to the 'ID' date in order to convert it into 20'th century format.
+		YEAR(GETDATE()) - (1900 + LEFT(ID, 2))
+	) AS 'Average age'
 FROM
 	NewUsers
--- Group by gender in order to run the code both males & females
-GROUP BY Gender;
+-- Group by gender in order to run the code for both males & females.
+GROUP BY
+	Gender;
 
 
 
@@ -346,7 +343,7 @@ FROM
     -- SupplierId and CategoryId to the respective table id's in order to obtain the data needed
 	company.products prod
 	INNER JOIN company.suppliers sup ON prod.SupplierId = sup.Id
-	INNER JOIN company.categories cat ON cat.Id = prod.CategoryId
+	INNER JOIN company.categories cat ON cat.Id = prod.CategoryId;
     
 
 
@@ -376,7 +373,7 @@ GROUP BY
 	RegionId,
 	RegionDescription;
 
-    
+
 
 
 GO
