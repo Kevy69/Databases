@@ -360,7 +360,7 @@ tabellen company.regions
 
 SELECT
 	RegionDescription AS 'Region',
-	COUNT(*) AS 'Number of Employees'
+	COUNT(DISTINCT emp.Id) AS 'Number of Employees'
 FROM
     -- Join the employees, employee_territory, territories and regions tables in order to obtain
     -- the needed relational data
