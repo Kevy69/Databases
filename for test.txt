@@ -1,0 +1,22 @@
+CRUD:
+
+ACID:
+
+
+programming types:
+    imparative: 
+        procedural: Standard programing. logic that goes step by stype.
+        
+    declarative: One liners that do some logic behind the scenes.
+
+joins:
+    Primary & foreign key
+
+    Cross join,
+    Inner join,
+    left (outer) join,
+    right (outer) join,
+    full (outer) join
+
+
+backup types?
