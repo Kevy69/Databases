@@ -6,7 +6,7 @@ ACID:
 programming types:
     imparative: 
         procedural: Standard programing. logic that goes step by stype.
-        
+
     declarative: One liners that do some logic behind the scenes.
 
 joins:
@@ -20,3 +20,10 @@ joins:
 
 
 backup types?
+
+ORM (explain)
+
+clustered/none clustered indexing
+
+heap table:
+    is what it sounds like. unstructured records, new data just gets slapped on top.
