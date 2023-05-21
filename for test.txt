@@ -4,10 +4,13 @@ ACID:
 
 
 programming types:
-    imparative: 
+    imparative:
         procedural: Standard programing. logic that goes step by stype.
+        object oriented
 
     declarative: One liners that do some logic behind the scenes.
+        functional
+        databases
 
 joins:
     Primary & foreign key
@@ -19,7 +22,10 @@ joins:
     full (outer) join
 
 
-backup types?
+backup types:
+    full
+    differential
+    tale log
 
 ORM (explain)
 
